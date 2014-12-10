@@ -13,14 +13,23 @@ public abstract class MapStateListener
     private boolean mMapTouched = false;
     private boolean mMapSettled = false;
 
-	private Handler mHandler;
+    private Handler mHandler;
 
     private GoogleMap mMap;
     private Activity mActivity;
 
+    private Runnable settleMapTask = new Runnable() {
+        @Override
+        public void run() {
+            settleMap();
+        }
+    };
+
     public MapStateListener(GoogleMap map, TouchableMapFragment touchableMapFragment, Activity activity) {
-        this.mMap = map;
-        this.mActivity = activity;
+        mMap = map;
+        mActivity = activity;
+
+	mHandler = new Handler();
 
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
@@ -47,17 +56,10 @@ public abstract class MapStateListener
         });
     }
 
-	private void runSettleTimer() {
-		mHandler.removeCallbacks(null);
-		mHandler.postDelayed(settleMapTask, SETTLE_TIME);
-	}
-
-	private Runnable settleMapTask = new Runnable()	{
-		@Override
-		public void run() {
-			settleMap();
-		}
-	};
+    private void runSettleTimer() {
+        mHandler.removeCallbacks(null);
+        mHandler.postDelayed(settleMapTask, SETTLE_TIME);
+    }
 
     private synchronized void releaseMap() {
         if (mMapTouched) {
@@ -68,7 +70,7 @@ public abstract class MapStateListener
 
     private void touchMap() {
         if (!mMapTouched) {
-			mHandler.removeCallbacks(null);
+            mHandler.removeCallbacks(null);
             mMapTouched = true;
             onMapTouched();
         }
