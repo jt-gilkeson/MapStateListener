@@ -1,22 +1,21 @@
 package dk.composed.mapstate;
 
 import android.app.Activity;
+import android.os.Handler;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-public abstract class MapStateListener {
+public abstract class MapStateListener 
+{
+    private static final int SETTLE_TIME = 500;
 
     private boolean mMapTouched = false;
     private boolean mMapSettled = false;
-    private Timer mTimer;
-    private static final int SETTLE_TIME = 500;
+
+	private Handler mHandler;
 
     private GoogleMap mMap;
-    private CameraPosition mLastPosition;
     private Activity mActivity;
 
     public MapStateListener(GoogleMap map, TouchableMapFragment touchableMapFragment, Activity activity) {
@@ -27,7 +26,7 @@ public abstract class MapStateListener {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 unsettleMap();
-                if(!mMapTouched) {
+                if (!mMapTouched) {
                     runSettleTimer();
                 }
             }
@@ -48,71 +47,43 @@ public abstract class MapStateListener {
         });
     }
 
-    private void updateLastPosition() {
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mLastPosition = MapStateListener.this.mMap.getCameraPosition();
-            }
-        });
-    }
+	private void runSettleTimer() {
+		mHandler.removeCallbacks(null);
+		mHandler.postDelayed(settleMapTask, SETTLE_TIME);
+	}
 
-    private void runSettleTimer() {
-        updateLastPosition();
-
-        if(mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-        }
-        mTimer = new Timer();
-        mTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CameraPosition currentPosition = MapStateListener.this.mMap.getCameraPosition();
-                        if (currentPosition.equals(mLastPosition)) {
-                            settleMap();
-                        }
-                    }
-                });
-            }
-        }, SETTLE_TIME);
-    }
+	private Runnable settleMapTask = new Runnable()	{
+		@Override
+		public void run() {
+			settleMap();
+		}
+	};
 
     private synchronized void releaseMap() {
-        if(mMapTouched) {
+        if (mMapTouched) {
             mMapTouched = false;
             onMapReleased();
         }
     }
 
     private void touchMap() {
-        if(!mMapTouched) {
-            if(mTimer != null) {
-                mTimer.cancel();
-                mTimer.purge();
-            }
+        if (!mMapTouched) {
+			mHandler.removeCallbacks(null);
             mMapTouched = true;
             onMapTouched();
         }
     }
 
     public void unsettleMap() {
-        if(mMapSettled) {
-            if(mTimer != null) {
-                mTimer.cancel();
-                mTimer.purge();
-            }
+        if (mMapSettled) {
+            mHandler.removeCallbacks(null);
             mMapSettled = false;
-            mLastPosition = null;
             onMapUnsettled();
         }
     }
 
     public void settleMap() {
-        if(!mMapSettled) {
+        if (!mMapSettled) {
             mMapSettled = true;
             onMapSettled();
         }
