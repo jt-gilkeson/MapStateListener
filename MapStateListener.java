@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 
 public abstract class MapStateListener 
 {
-    private static final int SETTLE_TIME = 500;
+    private static final int SETTLE_TIME = 250;
 
     private boolean mMapTouched = false;
     private boolean mMapSettled = false;
@@ -16,12 +16,19 @@ public abstract class MapStateListener
     private Handler mHandler;
 
     private GoogleMap mMap;
+    private CameraPosition mLastPosition;
     private Activity mActivity;
 
     private Runnable settleMapTask = new Runnable() {
         @Override
         public void run() {
-            settleMap();
+        	CameraPosition currentPosition = mMap.getCameraPosition();
+
+		if (currentPosition.equals(mLastPosition)) {
+			settleMap();
+		} else {
+			runSettleTimer();
+		}
         }
     };
 
@@ -57,6 +64,8 @@ public abstract class MapStateListener
     }
 
     private void runSettleTimer() {
+    	mLastPosition = mMap.getCameraPosition();
+    	
         mHandler.removeCallbacks(null);
         mHandler.postDelayed(settleMapTask, SETTLE_TIME);
     }
@@ -80,6 +89,7 @@ public abstract class MapStateListener
         if (mMapSettled) {
             mHandler.removeCallbacks(null);
             mMapSettled = false;
+            mLastPosition = null;
             onMapUnsettled();
         }
     }
