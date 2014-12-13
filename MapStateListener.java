@@ -24,7 +24,7 @@ public abstract class MapStateListener
         @Override
         public void run() 
         {
-        	CameraPosition currentPosition = mMap.getCameraPosition();
+            CameraPosition currentPosition = mMap.getCameraPosition();
 
 			if (currentPosition.equals(mLastPosition)) 
 			{
