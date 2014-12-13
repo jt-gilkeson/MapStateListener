@@ -19,74 +19,93 @@ public abstract class MapStateListener
     private CameraPosition mLastPosition;
     private Activity mActivity;
 
-    private Runnable settleMapTask = new Runnable() {
+    private Runnable settleMapTask = new Runnable() 
+    {
         @Override
-        public void run() {
+        public void run() 
+        {
         	CameraPosition currentPosition = mMap.getCameraPosition();
 
-		if (currentPosition.equals(mLastPosition)) {
-			settleMap();
-		} else {
-			runSettleTimer();
-		}
+			if (currentPosition.equals(mLastPosition)) 
+			{
+				settleMap();
+			} 
+			else 
+			{
+				runSettleTimer();
+			}
         }
     };
 
-    public MapStateListener(GoogleMap map, TouchableMapFragment touchableMapFragment, Activity activity) {
+    public MapStateListener(GoogleMap map, TouchableMapFragment touchableMapFragment, Activity activity) 
+    {
         mMap = map;
         mActivity = activity;
 
-	mHandler = new Handler();
+		mHandler = new Handler();
 
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() 
+        {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
+            public void onCameraChange(CameraPosition cameraPosition) 
+            {
                 unsettleMap();
-                if (!mMapTouched) {
+                if (!mMapTouched) 
+                {
                     runSettleTimer();
                 }
             }
         });
 
-        touchableMapFragment.setTouchListener(new TouchableWrapper.OnTouchListener() {
+        touchableMapFragment.setTouchListener(new TouchableWrapper.OnTouchListener() 
+        {
             @Override
-            public void onTouch() {
+            public void onTouch() 
+            {
                 touchMap();
                 unsettleMap();
             }
 
             @Override
-            public void onRelease() {
+            public void onRelease() 
+            {
                 releaseMap();
                 runSettleTimer();
             }
         });
     }
 
-    private void runSettleTimer() {
+    private void runSettleTimer() 
+    {
     	mLastPosition = mMap.getCameraPosition();
     	
         mHandler.removeCallbacks(null);
         mHandler.postDelayed(settleMapTask, SETTLE_TIME);
     }
 
-    private synchronized void releaseMap() {
-        if (mMapTouched) {
+    private synchronized void releaseMap() 
+    {
+        if (mMapTouched) 
+        {
             mMapTouched = false;
             onMapReleased();
         }
     }
 
-    private void touchMap() {
-        if (!mMapTouched) {
+    private void touchMap() 
+    {
+        if (!mMapTouched) 
+        {
             mHandler.removeCallbacks(null);
             mMapTouched = true;
             onMapTouched();
         }
     }
 
-    public void unsettleMap() {
-        if (mMapSettled) {
+    public void unsettleMap() 
+    {
+        if (mMapSettled) 
+        {
             mHandler.removeCallbacks(null);
             mMapSettled = false;
             mLastPosition = null;
@@ -94,8 +113,10 @@ public abstract class MapStateListener
         }
     }
 
-    public void settleMap() {
-        if (!mMapSettled) {
+    public void settleMap() 
+    {
+        if (!mMapSettled) 
+        {
             mMapSettled = true;
             onMapSettled();
         }
