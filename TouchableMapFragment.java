@@ -7,30 +7,30 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.MapFragment;
 
-public class TouchableMapFragment extends MapFragment 
+public class TouchableMapFragment extends MapFragment
 {
-    private View mOriginalContentView;
-    private TouchableWrapper mTouchView;
+	private View             mOriginalContentView;
+	private TouchableWrapper mTouchView;
 
-    public void setTouchListener(TouchableWrapper.OnTouchListener onTouchListener) 
-    {
-        mTouchView.setTouchListener(onTouchListener);
-    }
+	public void setTouchListener(TouchableWrapper.OnTouchListener onTouchListener)
+	{
+		mTouchView.setTouchListener(onTouchListener);
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) 
-    {
-        mOriginalContentView = super.onCreateView(inflater, parent, savedInstanceState);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
+	{
+		mOriginalContentView = super.onCreateView(inflater, parent, savedInstanceState);
 
-        mTouchView = new TouchableWrapper(getActivity());
-        mTouchView.addView(mOriginalContentView);
+		mTouchView = new TouchableWrapper(getActivity());
+		mTouchView.addView(mOriginalContentView);
 
-        return mTouchView;
-    }
+		return mTouchView;
+	}
 
-    @Override
-    public View getView() 
-    {
-        return mOriginalContentView;
-    }
+	@Override
+	public View getView()
+	{
+		return mOriginalContentView;
+	}
 }

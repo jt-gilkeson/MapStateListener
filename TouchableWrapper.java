@@ -4,39 +4,40 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-public class TouchableWrapper extends FrameLayout 
+public class TouchableWrapper extends FrameLayout
 {
-    public interface OnTouchListener 
-    {
-        public void onTouch();
-        public void onRelease();
-    }
+	public interface OnTouchListener
+	{
+		public void onTouch();
 
-    public TouchableWrapper(Context context) 
-    {
-        super(context);
-    }
+		public void onRelease();
+	}
 
-    public void setTouchListener(OnTouchListener onTouchListener) 
-    {
-        this.onTouchListener = onTouchListener;
-    }
+	public TouchableWrapper(Context context)
+	{
+		super(context);
+	}
 
-    private OnTouchListener onTouchListener;
+	public void setTouchListener(OnTouchListener onTouchListener)
+	{
+		this.onTouchListener = onTouchListener;
+	}
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) 
-    {
-        switch (event.getAction()) 
-        {
-            case MotionEvent.ACTION_DOWN:
-                onTouchListener.onTouch();
-                break;
-            case MotionEvent.ACTION_UP:
-                onTouchListener.onRelease();
-                break;
-        }
+	private OnTouchListener onTouchListener;
 
-        return super.dispatchTouchEvent(event);
-    }
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event)
+	{
+		switch (event.getAction())
+		{
+			case MotionEvent.ACTION_DOWN:
+				onTouchListener.onTouch();
+				break;
+			case MotionEvent.ACTION_UP:
+				onTouchListener.onRelease();
+				break;
+		}
+
+		return super.dispatchTouchEvent(event);
+	}
 }
