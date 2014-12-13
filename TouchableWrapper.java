@@ -4,22 +4,31 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-public class TouchableWrapper extends FrameLayout {
+public class TouchableWrapper extends FrameLayout 
+{
+    public interface OnTouchListener 
+    {
+        public void onTouch();
+        public void onRelease();
+    }
 
-    public TouchableWrapper(Context context) {
+    public TouchableWrapper(Context context) 
+    {
         super(context);
     }
 
-    public void setTouchListener(OnTouchListener onTouchListener) {
+    public void setTouchListener(OnTouchListener onTouchListener) 
+    {
         this.onTouchListener = onTouchListener;
     }
 
     private OnTouchListener onTouchListener;
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-
-        switch (event.getAction()) {
+    public boolean dispatchTouchEvent(MotionEvent event) 
+    {
+        switch (event.getAction()) 
+        {
             case MotionEvent.ACTION_DOWN:
                 onTouchListener.onTouch();
                 break;
@@ -29,10 +38,5 @@ public class TouchableWrapper extends FrameLayout {
         }
 
         return super.dispatchTouchEvent(event);
-    }
-
-    public interface OnTouchListener {
-        public void onTouch();
-        public void onRelease();
     }
 }
