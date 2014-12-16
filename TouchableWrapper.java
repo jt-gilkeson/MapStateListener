@@ -31,10 +31,16 @@ public class TouchableWrapper extends FrameLayout
 		switch (event.getAction())
 		{
 			case MotionEvent.ACTION_DOWN:
-				onTouchListener.onTouch();
+				if (onTouchListener != null)
+				{
+					onTouchListener.onTouch();
+				}
 				break;
 			case MotionEvent.ACTION_UP:
-				onTouchListener.onRelease();
+				if (onTouchListener != null)
+				{
+					onTouchListener.onRelease();
+				}
 				break;
 		}
 
