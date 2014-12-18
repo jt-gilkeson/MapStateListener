@@ -12,6 +12,11 @@ public class TouchableMapFragment extends MapFragment
 	private View             mOriginalContentView;
 	private TouchableWrapper mTouchView;
 
+	public static TouchableMapFragment newInstance()
+	{
+		return new TouchableMapFragment();
+	}
+
 	public void setTouchListener(TouchableWrapper.OnTouchListener onTouchListener)
 	{
 		mTouchView.setTouchListener(onTouchListener);

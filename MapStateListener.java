@@ -1,6 +1,5 @@
 package dk.composed.mapstate;
 
-import android.app.Activity;
 import android.os.Handler;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -17,7 +16,6 @@ public abstract class MapStateListener
 
 	private GoogleMap      mMap;
 	private CameraPosition mLastPosition;
-	private Activity       mActivity;
 
 	private Runnable settleMapTask = new Runnable()
 	{
@@ -37,10 +35,9 @@ public abstract class MapStateListener
 		}
 	};
 
-	public MapStateListener(GoogleMap map, TouchableMapFragment touchableMapFragment, Activity activity)
+	public MapStateListener(GoogleMap map, TouchableMapFragment touchableMapFragment)
 	{
 		mMap = map;
-		mActivity = activity;
 
 		mHandler = new Handler();
 
