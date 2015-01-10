@@ -1,4 +1,4 @@
-package dk.composed.mapstate;
+package com.jt.maputils;
 
 import android.content.Context;
 import android.view.MotionEvent;
