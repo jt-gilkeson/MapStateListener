@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 
 public abstract class MapStateListener
 {
-	private static final int SETTLE_TIME = 250;
+	private static final int SETTLE_TIME = 500;
 
 	private boolean mMapTouched = false;
 	private boolean mMapSettled = false;
@@ -74,9 +74,10 @@ public abstract class MapStateListener
 
 	private void runSettleTimer()
 	{
+		mHandler.removeCallbacks(settleMapTask);
+
 		mLastPosition = mMap.getCameraPosition();
 
-		mHandler.removeCallbacks(null);
 		mHandler.postDelayed(settleMapTask, SETTLE_TIME);
 	}
 
@@ -93,7 +94,7 @@ public abstract class MapStateListener
 	{
 		if (!mMapTouched)
 		{
-			mHandler.removeCallbacks(null);
+			mHandler.removeCallbacks(settleMapTask);
 			mMapTouched = true;
 			onMapTouched();
 		}
@@ -103,7 +104,7 @@ public abstract class MapStateListener
 	{
 		if (mMapSettled)
 		{
-			mHandler.removeCallbacks(null);
+			mHandler.removeCallbacks(settleMapTask);
 			mMapSettled = false;
 			mLastPosition = null;
 			onMapUnsettled();
