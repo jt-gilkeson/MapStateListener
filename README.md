@@ -1,6 +1,10 @@
 MapStateListener
 ================
 
+**For a library containing a more advanced version of this project plus more map utilities see:** 
+
+https://github.com/jt-gilkeson/google-maps-utils
+
 The MapStateListener can be used to receive callbacks from GoogleMaps on Android, when the map settles or unsettles, is touched or released. Settling the maps means that the map has finished scrolling, zooming or animating in any way and is not currently being touched.
 
 How to use it
